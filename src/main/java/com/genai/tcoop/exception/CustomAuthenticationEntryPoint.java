@@ -1,6 +1,6 @@
 package com.genai.tcoop.exception;
 
-import com.genai.tcoop.response.Response;
+import com.genai.tcoop.model.dto.response.Response;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
