@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  tcoop-redis:
+    container_name: tcoop-redis
+    build:
+      dockerfile: Dockerfile
+      context: ./redis
+    image: moonsungkim/tcoop-redis
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    platform: linux/amd64
+    ports:
+      - "6379:6379"
+  tcoop-database:
+    container_name: tcoop-database
+    image: mysql
+    platform: linux/amd64
+    environment:
+      - MYSQL_DATABASE=tcoop
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+      - TZ=Asia/Seoul
+    volumes:
+      - ./database/config:/etc/mysql/conf.d
+      - ./database/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+    restart: always
+  tcoop-app:
+    container_name: tcoop-app
+    build: .
+    depends_on:
+      - tcoop-database
+      - tcoop-redis
+    image: moonsungkim/tcoop-app
+    environment:
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+    ports:
+      - "80:8080"
+    restart: always
