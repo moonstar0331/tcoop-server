@@ -17,7 +17,7 @@ public class CustomUserService implements UserDetailsService {
     private final UserAccountRepository userAccountRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userAccountRepository.findByUserAccountId(username)
                 .map(User::fromEntity)
                 .orElseThrow(() -> new TcoopException(ErrorCode.USER_NOT_FOUND,
