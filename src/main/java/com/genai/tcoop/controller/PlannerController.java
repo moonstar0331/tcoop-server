@@ -23,9 +23,20 @@ public class PlannerController {
         return Response.success(PlannerResponse.fromPlannerDto(planner));
     }
 
+//    @GetMapping("/{plannerId}")
+//    public Response<PlannerResponse> get(@PathVariable Long plannerId) {
+//        plannerService.get(plannerId);
+//    }
+
     @PatchMapping("/{plannerId}")
     public Response<PlannerResponse> update(@PathVariable Long plannerId, @RequestBody PlannerUpdateRequest request, Authentication authentication) {
         PlannerDTO planner = plannerService.update(plannerId, request.getTitle(), authentication.getName());
         return Response.success(PlannerResponse.fromPlannerDto(planner));
+    }
+
+    @DeleteMapping("/{plannerId}")
+    public Response<Void> delete(@PathVariable Long plannerId, Authentication authentication) {
+        plannerService.delete(plannerId, authentication.getName());
+        return Response.success();
     }
 }

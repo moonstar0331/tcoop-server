@@ -56,4 +56,24 @@ public class PlannerService {
 
         return PlannerDTO.fromEntity(updated);
     }
+
+    @Transactional
+    public void delete(Long plannerId, String userAccountId) {
+        // 사용자 존재 여부 validation
+        UserAccount user = userAccountRepository.findByUserAccountId(userAccountId)
+                .orElseThrow(() -> new TcoopException(ErrorCode.USER_NOT_FOUND, String.format("%s is not found", userAccountId)));
+
+        // planner 존재 여부 validation
+        Planner planner = plannerRepository.findById(plannerId)
+                .orElseThrow(() -> new TcoopException(ErrorCode.PLANNER_NOT_FOUND));
+
+        // planner 작성자와 로그인 사용자 validation
+        if(planner.getUser() != user) {
+            throw new TcoopException(ErrorCode.INVALID_PERMISSION,
+                    String.format("%s has no permission with %s", userAccountId, plannerId));
+        }
+
+        // planner 삭제 soft delete 적용
+        planner.setIsDeleted(true);
+    }
 }
