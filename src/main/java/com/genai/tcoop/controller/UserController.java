@@ -25,4 +25,10 @@ public class UserController {
         User user = userService.join(request);
         return Response.success(UserJoinResponse.fromUser(user));
     }
+
+    @PostMapping("/login")
+    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
+        String token = userService.login(request.getUserAccountId(), request.getPassword());
+        return Response.success(new UserLoginResponse(token));
+    }
 }
