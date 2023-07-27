@@ -1,4 +1,4 @@
-package com.genai.tcoop.response;
+package com.genai.tcoop.model.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

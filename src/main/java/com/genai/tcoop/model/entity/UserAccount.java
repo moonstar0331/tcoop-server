@@ -3,6 +3,9 @@ package com.genai.tcoop.model.entity;
 import com.genai.tcoop.model.constant.Gender;
 import com.genai.tcoop.model.constant.UserRole;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -10,8 +13,11 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "users")
 @Entity
+@Where(clause = "is_deleted=false")
 public class UserAccount extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +32,7 @@ public class UserAccount extends BaseEntity {
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private UserRole role = UserRole.USER;
 
     @Column(name = "name")
