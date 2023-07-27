@@ -3,6 +3,7 @@ package com.genai.tcoop.model.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -31,6 +32,7 @@ public abstract class BaseEntity {
     @Column(nullable = false, updatable = false)
     private LocalDateTime updatedAt;
 
+    @Setter
     @Column(columnDefinition = "bit default false NOT NULL COMMENT '이용가능여부'")
     private Boolean isDeleted;
 }

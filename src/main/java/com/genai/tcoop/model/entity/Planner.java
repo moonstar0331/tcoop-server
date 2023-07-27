@@ -28,4 +28,8 @@ public class Planner extends BaseEntity {
 
     @Column(name = "title")
     private String title;
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
 }
