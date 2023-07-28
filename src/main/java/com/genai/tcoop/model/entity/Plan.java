@@ -35,10 +35,10 @@ public class Plan extends BaseEntity {
     private String address;
 
     @Column(name = "latitude", nullable = false)
-    private String latitude;
+    private Double latitude;
 
     @Column(name = "longitude", nullable = false)
-    private String longitude;
+    private Double longitude;
 
     @Column(name = "image_url")
     private String imageUrl;
