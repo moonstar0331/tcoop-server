@@ -3,6 +3,7 @@ package com.genai.tcoop.service;
 import com.genai.tcoop.exception.ErrorCode;
 import com.genai.tcoop.exception.TcoopException;
 import com.genai.tcoop.model.dto.PlannerDTO;
+import com.genai.tcoop.model.dto.response.PlannerResponse;
 import com.genai.tcoop.model.entity.Planner;
 import com.genai.tcoop.model.entity.UserAccount;
 import com.genai.tcoop.repository.PlannerRepository;
@@ -33,6 +34,13 @@ public class PlannerService {
         // entity -> dto
         return PlannerDTO.fromEntity(saved);
     }
+
+    public PlannerDTO get(Long plannerId) {
+        Planner planner = plannerRepository.findById(plannerId)
+                .orElseThrow(() -> new TcoopException(ErrorCode.PLANNER_NOT_FOUND));
+        return PlannerDTO.fromEntity(planner);
+    }
+
 
     @Transactional
     public PlannerDTO update(Long plannerId, String title, String userAccountId) {

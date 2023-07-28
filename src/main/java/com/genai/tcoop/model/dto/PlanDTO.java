@@ -18,8 +18,8 @@ public class PlanDTO {
     private PlannerDTO planner;
     private String content;
     private String address;
-    private String latitude;
-    private String longitude;
+    private Double latitude;
+    private Double longitude;
     private String imageUrl;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
