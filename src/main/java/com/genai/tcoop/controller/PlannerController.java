@@ -1,10 +1,14 @@
 package com.genai.tcoop.controller;
 
+import com.genai.tcoop.model.dto.PlanDTO;
 import com.genai.tcoop.model.dto.PlannerDTO;
+import com.genai.tcoop.model.dto.request.PlanCreateRequest;
 import com.genai.tcoop.model.dto.request.PlannerCreateRequest;
 import com.genai.tcoop.model.dto.request.PlannerUpdateRequest;
+import com.genai.tcoop.model.dto.response.PlanResponse;
 import com.genai.tcoop.model.dto.response.PlannerResponse;
 import com.genai.tcoop.model.dto.response.Response;
+import com.genai.tcoop.service.PlanService;
 import com.genai.tcoop.service.PlannerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class PlannerController {
 
     private final PlannerService plannerService;
+    private final PlanService planService;
 
     @PostMapping
     public Response<PlannerResponse> create(@RequestBody PlannerCreateRequest request, Authentication authentication) {
@@ -38,5 +43,11 @@ public class PlannerController {
     public Response<Void> delete(@PathVariable Long plannerId, Authentication authentication) {
         plannerService.delete(plannerId, authentication.getName());
         return Response.success();
+    }
+
+    @PostMapping("/{plannerId}/plan")
+    public Response<PlanResponse> createPlan(@PathVariable Long plannerId, @RequestBody PlanCreateRequest request, Authentication authentication) throws Exception {
+        PlanDTO plan = planService.create(plannerId, request, authentication.getName());
+        return Response.success(PlanResponse.fromPlanDto(plan));
     }
 }
