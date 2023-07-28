@@ -88,7 +88,6 @@ public class PlanService {
                 .orElseThrow(() -> new TcoopException(ErrorCode.USER_NOT_FOUND, String.format("%s is not found", userAccountId)));
 
         // Planner 작성자와 로그인 사용자 validation
-
         if (plan.getPlanner().getUser() != user) {
             throw new TcoopException(ErrorCode.INVALID_PERMISSION,
                     String.format("%s has no permission with %s plan", userAccountId, planId));
@@ -125,5 +124,25 @@ public class PlanService {
         // 변경사항 저장
         Plan updated = planRepository.save(plan);
         return PlanDTO.fromEntity(updated);
+    }
+
+    @Transactional
+    public void delete(Long planId, String userAccountId) {
+        // plan 존재 여부 validation
+        Plan plan = planRepository.findById(planId)
+                .orElseThrow(() -> new TcoopException(ErrorCode.PLAN_NOT_FOUND));
+
+        // 사용자 존재 여부 validation
+        UserAccount user = userAccountRepository.findByUserAccountId(userAccountId)
+                .orElseThrow(() -> new TcoopException(ErrorCode.USER_NOT_FOUND, String.format("%s is not found", userAccountId)));
+
+        // Planner 작성자와 로그인 사용자 validation
+        if (plan.getPlanner().getUser() != user) {
+            throw new TcoopException(ErrorCode.INVALID_PERMISSION,
+                    String.format("%s has no permission with %s plan", userAccountId, planId));
+        }
+
+        // plan soft delete 적용
+        plan.setIsDeleted(true);
     }
 }

@@ -61,4 +61,10 @@ public class PlannerController {
         PlanDTO plan = planService.update(planId, request, authentication.getName());
         return Response.success(PlanResponse.fromPlanDto(plan));
     }
+
+    @DeleteMapping("/plans/{planId}")
+    public Response<Void> deletePlan(@PathVariable Long planId, Authentication authentication) {
+        planService.delete(planId, authentication.getName());
+        return Response.success();
+    }
 }
