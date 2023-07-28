@@ -50,4 +50,20 @@ public class Plan extends BaseEntity {
     @Column(name = "end_date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endTime;
+
+    public void updateAddress(String address) {
+        this.address = address;
+    }
+
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void updatePlan(String content, Double latitude, Double longitude, LocalDateTime startTime, LocalDateTime endTime) {
+        this.content = content;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }
