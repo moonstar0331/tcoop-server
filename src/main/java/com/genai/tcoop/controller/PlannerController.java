@@ -5,6 +5,7 @@ import com.genai.tcoop.model.dto.PlannerDTO;
 import com.genai.tcoop.model.dto.request.PlanRequest;
 import com.genai.tcoop.model.dto.request.PlannerRequest;
 import com.genai.tcoop.model.dto.response.PlanResponse;
+import com.genai.tcoop.model.dto.response.PlannerGetResponse;
 import com.genai.tcoop.model.dto.response.PlannerResponse;
 import com.genai.tcoop.model.dto.response.Response;
 import com.genai.tcoop.service.PlanService;
@@ -12,6 +13,9 @@ import com.genai.tcoop.service.PlannerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,10 +31,14 @@ public class PlannerController {
         return Response.success(PlannerResponse.fromPlannerDto(planner));
     }
 
-//    @GetMapping("/{plannerId}")
-//    public Response<PlannerResponse> get(@PathVariable Long plannerId) {
-//        plannerService.get(plannerId);
-//    }
+    @GetMapping("/{plannerId}")
+    public Response<PlannerGetResponse> get(@PathVariable Long plannerId) {
+        PlannerDTO planner = plannerService.get(plannerId);
+        List<PlanDTO> plans = planService.getAll(plannerId);
+        PlannerGetResponse response = new PlannerGetResponse(PlannerResponse.fromPlannerDto(planner),
+                plans.stream().map(PlanResponse::fromPlanDto).collect(Collectors.toList()));
+        return Response.success(response);
+    }
 
     @PatchMapping("/{plannerId}")
     public Response<PlannerResponse> update(@PathVariable Long plannerId, @RequestBody PlannerRequest request, Authentication authentication) {

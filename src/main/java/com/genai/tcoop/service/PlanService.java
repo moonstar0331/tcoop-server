@@ -18,6 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class PlanService {
@@ -75,6 +78,11 @@ public class PlanService {
                 .orElseThrow(() -> new TcoopException(ErrorCode.PLAN_NOT_FOUND));
 
         return PlanDTO.fromEntity(plan);
+    }
+
+    public List<PlanDTO> getAll(Long plannerId) {
+        List<Plan> plans = planRepository.findAllByPlanner_Id(plannerId);
+        return plans.stream().map(PlanDTO::fromEntity).collect(Collectors.toList());
     }
 
     @Transactional
