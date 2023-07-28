@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlanCreateRequest {
+public class PlanRequest {
 
     @IsLatitude
     @NotNull(message ="Latitude is required")

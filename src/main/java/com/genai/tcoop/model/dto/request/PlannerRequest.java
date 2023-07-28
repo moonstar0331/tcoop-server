@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlannerCreateRequest {
+public class PlannerRequest {
     private String title;
 }
