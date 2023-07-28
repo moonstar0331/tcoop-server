@@ -2,6 +2,7 @@ package com.genai.tcoop.aws;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
@@ -63,5 +64,12 @@ public class AwsS3Uploader {
         }
 
         return amazonS3Client.getUrl(bucket, name).toString();
+    }
+
+    public void deleteImage(String imageUrl) {
+        String fileKey = S3_PLAN_IMAGE_DIRECTORY_NAME + "/" + imageUrl.split("/")[4];
+        if(amazonS3Client.doesObjectExist(bucket, fileKey)) {
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileKey));
+        }
     }
 }
