@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
+        <title>TCOOP</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <script>
+        $('document').ready(function () {
+            var path = location.pathname.split('/');
+
+            $.ajax({
+                type: "GET",
+                url: '/api/planners/' + path[2],
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
+                }
+            }).done(function (res) {
+                var plans = res["result"]["plans"];
+                $.each(plans, function (idx, plan) {
+                    $("#plans").append("<ul>" +
+                        "<li>내용 : " + plan.content + "</li>" +
+                        "<li>위도 : " + plan.latitude + "</li>" +
+                        "<li>경도 : " + plan.longitude + "</li>" +
+                        "<li><img src='" + plan.imageUrl + "'/>" + "</li>" +
+                        "<li>시작시간 : " + plan.startTime + "</li>" +
+                        "<li>종료시간 : " + plan.endTime + "</li>" +
+                        "<li>생성일 : " + plan.createdAt + "</li>" +
+                        "<li>수정일 : " + plan.updatedAt + "</li>" +
+                        "</ul> <hr>");
+                });
+            });
+        });
+    </script>
+    <body>
+
+        <h3>나의 플랜 리스트</h3>
+        <hr>
+        <input type="text" id="search"/>
+        <button type="button" onclick="search()">검색</button>
+        <fieldset id="list">
+
+        </fieldset>
+        <hr>
+        <ul id="plans">
+
+        </ul>
+        <hr>
+        <div id="createForm" style="display: none;">
+            <div>
+                <label for="latitude">latitude</label>
+                <input id="latitude" type="text">
+            </div>
+            <div>
+                <label for="longitude">longitude</label>
+                <input id="longitude" type="text">
+            </div>
+            <div>
+                <label for="address">address</label>
+                <input id="address" type="text">
+            </div>
+            <div>
+                <label for="title">title</label>
+                <input id="title" type="text">
+            </div>
+            <div>
+                <label for="content">content</label>
+                <input id="content" type="text">
+            </div>
+            <div>
+                <label for="startTime">start time</label>
+                <input id="startTime" type="datetime-local">
+            </div>
+            <div>
+                <label for="endTime">end time</label>
+                <input id="endTime" type="datetime-local">
+            </div>
+        </div>
+        <div>
+            <button type="button" onclick="createPlan()">Create Plan</button>
+        </div>
+    </body>
+    <script>
+        function search() {
+            $('#list').empty();
+            $.ajax({
+                url: '/api/search?keyword=' + $('#search').val(),
+                type: "GET",
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
+                }
+            }).done(function (res) {
+                console.log(res);
+                var results = res["result"]["data"];
+                $("#list").append("<legend>장소 선택</legend>");
+                $.each(results, function(idx, result) {
+                    $("#list").append("<div>" +
+                    "<input type='radio' name='place' id='" + idx + "'/>" + result.title + "</div>");
+                });
+                $("#list").append("<button type='button' onclick='selectPlace()'>선택</button>");
+                localStorage.setItem('results', JSON.stringify(results));
+            });
+        }
+
+        function selectPlace() {
+
+            var results = JSON.parse(localStorage.getItem('results'));
+            console.log(results);
+
+            var input = $("input[name=place]:checked");
+            var selectedId = input.attr('id');
+            console.log(selectedId);
+            console.log(results[selectedId]['title']);
+
+            $('#createForm').css('display', 'block');
+            window.document.getElementById('address').value = results[selectedId]['title'];
+            window.document.getElementById('latitude').value = results[selectedId]['latitude'];
+            window.document.getElementById('longitude').value = results[selectedId]['longitude'];
+
+            $('#search').value = "";
+            $('#list').empty();
+        }
+
+        function createPlan() {
+            var data = {
+                latitude: $('#latitude').val(),
+                longitude: $('#longitude').val(),
+                address: $('#address').val(),
+                title: $('#title').val(),
+                content: $('#content').val(),
+                startTime: $('#startTime').val(),
+                endTime: $('#endTime').val()
+            }
+            $.ajax({
+                url: '/api' + document.location.pathname + '/plans',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
+                }
+            }).done(function (res){
+                $("#plans").append("<ul>" +
+                    "<li>내용 : " + res["result"]["content"] + "</li>" +
+                    "<li>위도 : " + res["result"]["latitude"] + "</li>" +
+                    "<li>경도 : " + res["result"]["longitude"] + "</li>" +
+                    "<li><img src='" + res["result"]["imageUrl"] + "'/>" + "</li>" +
+                    "<li>시작시간 : " + res["result"]["startTime"] + "</li>" +
+                    "<li>종료시간 : " + res["result"]["endTime"] + "</li>" +
+                    "<li>생성일 : " + res["result"]["createdAt"] + "</li>" +
+                    "<li>수정일 : " + res["result"]["updatedAt"] + "</li>" +
+                    "</ul> <hr>");
+
+                $('#createForm div input').value = "";
+                $('#createForm').css('display', 'none');
+            });
+        }
+    </script>
+</html>
