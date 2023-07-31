@@ -5,6 +5,7 @@ import com.genai.tcoop.config.util.CustomUserService;
 import com.genai.tcoop.exception.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -44,10 +45,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeRequests()
-                .regexMatchers("^(?!/api/).*").permitAll()
-                .antMatchers(HttpMethod.GET, "/").permitAll()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+//                .regexMatchers("^(?!/api/).*").permitAll()
+//                .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/join", "/api/users/login").permitAll()
                 .antMatchers("/api/**").authenticated()
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -55,6 +58,12 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtTokenFilter(key, customUserService), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .and()
+                .formLogin()
+                .loginPage("/login").permitAll()
+                .loginProcessingUrl("/api/users/login")
+                .and()
+                .logout()
                 .and()
                 .build();
     }
