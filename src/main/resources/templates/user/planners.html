@@ -17,21 +17,23 @@
             }).done(function (res) {
                 var planners = res["result"];
                 $.each(planners, function (idx, planner) {
-                    $("#planners").append("<ul>" +
-                        "<li>" + (idx+1) + "</li>" +
+                    $("#planners").append("<fieldset><legend>" + (idx+1) + "</legend>" +
+                        "<ul>" +
                         "<li>제목 : <a href='" + planner.plannerId + "'>" + planner.title + "</a></li>"+
                         "<li>생성일 : " + planner.createdAt + "</li>" +
                         "<li>수정일 : " + planner.updatedAt + "</li>" +
-                        "</ul>");
+                        "</ul></fieldset>");
                 });
             });
         });
     </script>
     <body>
-        <h3>나의 플래너 리스트</h3>
-        <ul id="planners">
+        <div>
+            <h3>나의 플래너 리스트</h3>
+            <div id="planners">
 
-        </ul>
+            </div>
+        </div>
     </body>
     <script>
 

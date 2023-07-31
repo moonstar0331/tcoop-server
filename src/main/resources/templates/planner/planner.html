@@ -19,16 +19,16 @@
             }).done(function (res) {
                 var plans = res["result"]["plans"];
                 $.each(plans, function (idx, plan) {
-                    $("#plans").append("<ul>" +
-                        "<li>내용 : " + plan.content + "</li>" +
+                    $("#plans").append("<fieldset><legend>" + plan.address + "</legend>" +
+                        "<div><img src='" + plan.imageUrl + "'/></div>" +
+                        "<ul><li>내용 : " + plan.content + "</li>" +
                         "<li>위도 : " + plan.latitude + "</li>" +
                         "<li>경도 : " + plan.longitude + "</li>" +
-                        "<li><img src='" + plan.imageUrl + "'/>" + "</li>" +
                         "<li>시작시간 : " + plan.startTime + "</li>" +
                         "<li>종료시간 : " + plan.endTime + "</li>" +
                         "<li>생성일 : " + plan.createdAt + "</li>" +
                         "<li>수정일 : " + plan.updatedAt + "</li>" +
-                        "</ul> <hr>");
+                        "</ul> </fieldset>");
                 });
             });
         });
@@ -37,15 +37,17 @@
 
         <h3>나의 플랜 리스트</h3>
         <hr>
+        <label for="search">지도 검색</label>
         <input type="text" id="search"/>
         <button type="button" onclick="search()">검색</button>
+        <br>
         <fieldset id="list">
 
         </fieldset>
         <hr>
-        <ul id="plans">
+        <div id="plans">
 
-        </ul>
+        </div>
         <hr>
         <div id="createForm" style="display: none;">
             <div>
@@ -59,10 +61,6 @@
             <div>
                 <label for="address">address</label>
                 <input id="address" type="text">
-            </div>
-            <div>
-                <label for="title">title</label>
-                <input id="title" type="text">
             </div>
             <div>
                 <label for="content">content</label>
@@ -127,7 +125,6 @@
                 latitude: $('#latitude').val(),
                 longitude: $('#longitude').val(),
                 address: $('#address').val(),
-                title: $('#title').val(),
                 content: $('#content').val(),
                 startTime: $('#startTime').val(),
                 endTime: $('#endTime').val()
@@ -141,16 +138,16 @@
                     xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
                 }
             }).done(function (res){
-                $("#plans").append("<ul>" +
-                    "<li>내용 : " + res["result"]["content"] + "</li>" +
+                $("#plans").append("<fieldset><legend>" + res["result"]["address"] + "</legend>" +
+                    "<div><img src='" + res["result"]["imageUrl"] + "'/></div>" +
+                    "<ul><li>내용 : " + res["result"]["content"] + "</li>" +
                     "<li>위도 : " + res["result"]["latitude"] + "</li>" +
                     "<li>경도 : " + res["result"]["longitude"] + "</li>" +
-                    "<li><img src='" + res["result"]["imageUrl"] + "'/>" + "</li>" +
                     "<li>시작시간 : " + res["result"]["startTime"] + "</li>" +
                     "<li>종료시간 : " + res["result"]["endTime"] + "</li>" +
                     "<li>생성일 : " + res["result"]["createdAt"] + "</li>" +
                     "<li>수정일 : " + res["result"]["updatedAt"] + "</li>" +
-                    "</ul> <hr>");
+                    "</ul> </fieldset>");
 
                 $('#createForm div input').value = "";
                 $('#createForm').css('display', 'none');
