@@ -18,9 +18,10 @@ services:
     platform: linux/amd64
     environment:
       - MYSQL_DATABASE=tcoop
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - MYSQL_USER=${DB_USER}
-      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
+      - MYSQL_ROOT_USER=${SPRING_DATASOURCE_USERNAME}
+      - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - MYSQL_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - MYSQL_ROOT_HOST=localhost
       - TZ=Asia/Seoul
     volumes:
       - ./database/config:/etc/mysql/conf.d
