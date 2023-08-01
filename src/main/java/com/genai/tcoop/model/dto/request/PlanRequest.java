@@ -24,8 +24,6 @@ public class PlanRequest {
 
     private String address;
 
-    private String title;
-
     private String content;
 
     private LocalDateTime startTime;

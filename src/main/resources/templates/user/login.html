@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
+        <title>TCOOP</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <body>
+        <div>
+            <h3>로그인 페이지</h3>
+            <div>
+                <label for="username">ID : </label>
+                <input id="username" class="username" type="text">
+            </div>
+            <div>
+                <label for="password">PASSWORD : </label>
+                <input id="password" class="password" type="password">
+            </div>
+            <div>
+                <button type="button" onclick="login()">로그인</button>
+            </div>
+        </div>
+    </body>
+    <script>
+        function login() {
+            var data = {
+                userAccountId: $('#username').val(),
+                password: $('#password').val()
+            }
+
+            $.ajax({
+                url: '/api/users/login',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8'
+            }).done(function(response, xhr) {
+                console.log(response["result"]["token"]);
+                localStorage.setItem('token', 'Bearer ' + response["result"]["token"]);
+                document.cookie = "Authorization=Bearer " + response["result"]["token"];
+                window.location.replace("/my");
+            });
+        }
+    </script>
+</html>

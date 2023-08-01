@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class PlannerService {
@@ -33,6 +36,16 @@ public class PlannerService {
 
         // entity -> dto
         return PlannerDTO.fromEntity(saved);
+    }
+
+    public List<PlannerDTO> getMyPlanners(String userAccountId) {
+        // 사용자 존재 여부 validation
+        UserAccount user = userAccountRepository.findByUserAccountId(userAccountId)
+                .orElseThrow(() -> new TcoopException(ErrorCode.USER_NOT_FOUND, String.format("%s is not found", userAccountId)));
+
+        List<Planner> planners = plannerRepository.findAllByUser(user);
+
+        return planners.stream().map(PlannerDTO::fromEntity).collect(Collectors.toList());
     }
 
     public PlannerDTO get(Long plannerId) {

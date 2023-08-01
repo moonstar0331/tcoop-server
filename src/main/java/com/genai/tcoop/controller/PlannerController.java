@@ -31,6 +31,12 @@ public class PlannerController {
         return Response.success(PlannerResponse.fromPlannerDto(planner));
     }
 
+    @GetMapping
+    public Response<List<PlannerResponse>> getMyPlanners(Authentication authentication) {
+        List<PlannerDTO> planners = plannerService.getMyPlanners(authentication.getName());
+        return Response.success(planners.stream().map(PlannerResponse::fromPlannerDto).collect(Collectors.toList()));
+    }
+
     @GetMapping("/{plannerId}")
     public Response<PlannerGetResponse> get(@PathVariable Long plannerId) {
         PlannerDTO planner = plannerService.get(plannerId);

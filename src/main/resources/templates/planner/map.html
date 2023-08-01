@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
+    <title>TCOOP</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!--네이버-->
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=n4ojo23ec2&submodules=geocoder"></script>
+</head>
+<script>
+
+</script>
+<body>
+    <h3>지도에서 보기</h3>
+    <div id="map" style="width: 1200px; height: 600px;">
+
+    </div>
+</body>
+<script>
+    // 네이버
+    var mapOptions = {
+        center: new naver.maps.LatLng(37.3595704, 127.105399),
+        zoom: 10
+    };
+
+    var map = new naver.maps.Map('map', mapOptions);
+
+    $('document').ready(function () {
+        var path = location.pathname.split('/');
+        $.ajax({
+            type: "GET",
+            url: '/api/planners/' + path[2],
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
+            }
+        }).done(function (res) {
+            var plans = res["result"]["plans"];
+            console.log(plans);
+            $.each(plans, function (idx, plan) {
+                var tm128 = new naver.maps.Point(plan.latitude, plan.longitude);
+                var latLng = naver.maps.TransCoord.fromTM128ToLatLng(tm128);
+
+                var marker = new naver.maps.Marker({
+                    position: latLng,
+                    map: map
+                });
+
+                var contentString = [
+                    '<div>',
+                    '    <h4>' + plan.address + '</h4>',
+                    '    <div style="align-content: center">',
+                    '        <img src="' + plan.imageUrl + '" width="300" height="300" />',
+                    '    </div>',
+                    '    <p>' + plan.content + '</p>',
+                    '    <p>시작시간 : ' + plan.startTime + '</p>',
+                    '    <p>종료시간 : ' + plan.endTime + '</p>',
+                    '</div>'
+                    ].join('');
+
+                var infoWindow = new naver.maps.InfoWindow({
+                    content: contentString
+                });
+
+                naver.maps.Event.addListener(marker, "click", function(e) {
+                    if(infoWindow.getMap()) {
+                        infoWindow.close();
+                    } else {
+                        infoWindow.open(map, marker);
+                    }
+                });
+            });
+        });
+    });
+
+</script>
+</html>

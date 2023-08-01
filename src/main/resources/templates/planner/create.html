@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
+        <title>TCOOP</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <script>
+        function getCookie(key) {
+            var nameOfCookie = null;
+            var cookie = document.cookie.split(";");
+            cookie.some(function(item) {
+                item = item.replace(' ', '');
+                var dix = time.split('=');
+                if(key === dic[0]) {
+                    result = dic[1];
+                    return true;
+                }
+            });
+            return result;
+        }
+    </script>
+    <body>
+        <h3>플래너 생성</h3>
+        <div>
+            <label for="title">제목</label>
+            <input id="title" type="text">
+            <button id="btn" type="button" onclick="create()">플래너 생성</button>
+        </div>
+    </body>
+    <script>
+        function create() {
+            var data = {
+                title: $('#title').val()
+            }
+
+            $.ajax({
+                url: '/api/planners',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
+                }
+            }).done(function(response, xhr) {
+                console.log(response["result"]["token"]);
+                localStorage.setItem('token', 'Bearer ' + response["result"]["token"]);
+                document.cookie = "Authorization=Bearer " + response["result"]["token"];
+                window.location.replace("/my");
+            });
+        }
+    </script>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
+        <title>TCOOP</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <script>
+        $('document').ready(function () {
+            $.ajax({
+                type: "GET",
+                url: '/api/planners',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
+                }
+            }).done(function (res) {
+                var planners = res["result"];
+                $.each(planners, function (idx, planner) {
+                    $("#planners").append("<fieldset><legend>" + (idx+1) + "</legend>" +
+                        "<ul>" +
+                        "<li>제목 : <a href='" + planner.plannerId + "'>" + planner.title + "</a></li>"+
+                        "<li>생성일 : " + planner.createdAt + "</li>" +
+                        "<li>수정일 : " + planner.updatedAt + "</li>" +
+                        "</ul></fieldset>");
+                });
+            });
+        });
+    </script>
+    <body>
+        <div>
+            <h3>나의 플래너 리스트</h3>
+            <div id="planners">
+
+            </div>
+        </div>
+    </body>
+    <script>
+
+    </script>
+</html>
