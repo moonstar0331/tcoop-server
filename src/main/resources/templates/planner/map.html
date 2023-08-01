@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
+    <title>TCOOP</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<script>
+
+</script>
+<body>
+    <h3>지도에서 보기</h3>
+    <div id="map" style="width: 1200px; height: 600px;">
+
+    </div>
+</body>
+<script>
+    var map = L.map('map', {
+        center: [35.8565, 128.565],
+        zoom: 7
+    });
+
+    var tiles = L.tileLayer('http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    var path = location.pathname.split('/');
+    $.ajax({
+        type: "GET",
+        url: '/api/planners/' + path[2],
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
+        }
+    }).done(function (res) {
+       var plans = res["result"]["plans"];
+       console.log(plans);
+       $.each(plans, function (plan) {
+
+           var marker = L.marker([plan.latitude, plan.longitude]).addTo(map);
+
+           // L.marker([plan.latitude, plan.longitude]).addTo(map).bindPopup(
+           //     "<h2>" + plan.address + "</h2><br>" +
+           //     "<img src='" + plan.imageUrl + "'>" +
+           //     "<p>" + plan.startTime + " ~ " + plan.endTime + "</p>"
+           // );
+       });
+    });
+</script>
+</html>

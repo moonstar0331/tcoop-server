@@ -36,6 +36,7 @@
     <body>
 
         <h3>나의 플랜 리스트</h3>
+        <button onclick="goMap()">지도에서 보기</button>
         <hr>
         <label for="search">지도 검색</label>
         <input type="text" id="search"/>
@@ -80,6 +81,10 @@
         </div>
     </body>
     <script>
+
+        function goMap () {
+            window.location.href = window.location.href + "/map";
+        }
         function search() {
             $('#list').empty();
             $.ajax({
@@ -98,6 +103,7 @@
                 });
                 $("#list").append("<button type='button' onclick='selectPlace()'>선택</button>");
                 localStorage.setItem('results', JSON.stringify(results));
+                $('#search').empty();
             });
         }
 

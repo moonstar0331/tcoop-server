@@ -22,6 +22,11 @@ public class PageController {
         return "planner/planner";
     }
 
+    @GetMapping("/planners/{plannerId}/map")
+    public String map(@PathVariable Long plannerId) {
+        return "planner/map";
+    }
+
     @GetMapping("/planners/list")
     public String myPlanners() {
         return "user/planners";
@@ -31,4 +36,5 @@ public class PageController {
     public String createPlanner() {
         return "planner/create";
     }
+
 }
