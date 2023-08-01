@@ -11,7 +11,8 @@
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!--네이버-->
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=n4ojo23ec2&submodules=geocoder"></script>
 </head>
 <script>
 
@@ -23,36 +24,36 @@
     </div>
 </body>
 <script>
-    var map = L.map('map', {
-        center: [35.8565, 128.565],
-        zoom: 7
+    // 네이버
+    var mapOptions = {
+        center: new naver.maps.LatLng(37.3595704, 127.105399),
+        zoom: 10
+    };
+
+    var map = new naver.maps.Map('map', mapOptions);
+
+    $('document').ready(function () {
+        var path = location.pathname.split('/');
+        $.ajax({
+            type: "GET",
+            url: '/api/planners/' + path[2],
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
+            }
+        }).done(function (res) {
+            var plans = res["result"]["plans"];
+            console.log(plans);
+            $.each(plans, function (idx, plan) {
+                var tm128 = new naver.maps.Point(plan.latitude, plan.longitude);
+                var latLng = naver.maps.TransCoord.fromTM128ToLatLng(tm128);
+
+                var marker = new naver.maps.Marker({
+                    position: latLng,
+                    map: map
+                });
+            });
+        });
     });
 
-    var tiles = L.tileLayer('http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
-
-    var path = location.pathname.split('/');
-    $.ajax({
-        type: "GET",
-        url: '/api/planners/' + path[2],
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
-        }
-    }).done(function (res) {
-       var plans = res["result"]["plans"];
-       console.log(plans);
-       $.each(plans, function (plan) {
-
-           var marker = L.marker([plan.latitude, plan.longitude]).addTo(map);
-
-           // L.marker([plan.latitude, plan.longitude]).addTo(map).bindPopup(
-           //     "<h2>" + plan.address + "</h2><br>" +
-           //     "<img src='" + plan.imageUrl + "'>" +
-           //     "<p>" + plan.startTime + " ~ " + plan.endTime + "</p>"
-           // );
-       });
-    });
 </script>
 </html>

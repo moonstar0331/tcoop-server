@@ -116,14 +116,16 @@ public class SearchService {
             Double mapy = Double.valueOf(itemObject.getString("mapy"));
 
             // KATEC 좌표계 기준 데이터를 경도, 위도로 변환
-            GeoPoint geoPoint = GeoTrans.convert(GeoTrans.KATEC, GeoTrans.GEO, new GeoPoint(mapx, mapy));
+//            GeoPoint geoPoint = GeoTrans.convert(GeoTrans.KATEC, GeoTrans.GEO, new GeoPoint(mapx, mapy));
 
             NaverLocationInfoDTO naverLocationInfoDto
                     = NaverLocationInfoDTO.builder()
                     .address(address)
                     .title(title)
-                    .latitude(geoPoint.getY())
-                    .longitude(geoPoint.getX())
+                    .latitude(mapx)
+                    .longitude(mapy)
+//                    .latitude(geoPoint.getY())
+//                    .longitude(geoPoint.getX())
                     .build();
             naverLocationInfoDtoList.add(naverLocationInfoDto);
         }
