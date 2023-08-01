@@ -4,13 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
     <title>TCOOP</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-          crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!--네이버-->
     <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=n4ojo23ec2&submodules=geocoder"></script>
 </head>
@@ -50,6 +44,30 @@
                 var marker = new naver.maps.Marker({
                     position: latLng,
                     map: map
+                });
+
+                var contentString = [
+                    '<div>',
+                    '    <h4>' + plan.address + '</h4>',
+                    '    <div style="align-content: center">',
+                    '        <img src="' + plan.imageUrl + '" width="300" height="300" />',
+                    '    </div>',
+                    '    <p>' + plan.content + '</p>',
+                    '    <p>시작시간 : ' + plan.startTime + '</p>',
+                    '    <p>종료시간 : ' + plan.endTime + '</p>',
+                    '</div>'
+                    ].join('');
+
+                var infoWindow = new naver.maps.InfoWindow({
+                    content: contentString
+                });
+
+                naver.maps.Event.addListener(marker, "click", function(e) {
+                    if(infoWindow.getMap()) {
+                        infoWindow.close();
+                    } else {
+                        infoWindow.open(map, marker);
+                    }
                 });
             });
         });
