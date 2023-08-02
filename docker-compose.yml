@@ -14,14 +14,14 @@ services:
       - "6379:6379"
   tcoop-database:
     container_name: tcoop-database
-    image: mysql
+    build:
+      dockerfile: Dockerfile
+      context: ./database
+    image: moonsungkim/tcoop-database
     platform: linux/amd64
     environment:
       - MYSQL_DATABASE=tcoop
-      - MYSQL_ROOT_USER=${SPRING_DATASOURCE_USERNAME}
       - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
-      - MYSQL_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
-      - MYSQL_ROOT_HOST=localhost
       - TZ=Asia/Seoul
     volumes:
       - ./database/config:/etc/mysql/conf.d
@@ -31,7 +31,6 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
-      - --default-authentication-plugin=mysql_native_password
     restart: always
   tcoop-app:
     container_name: tcoop-app
@@ -41,8 +40,8 @@ services:
       - tcoop-redis
     image: moonsungkim/tcoop-app
     environment:
-      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - MYSQL_DATABASE=tcoop
+      - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
     ports:
       - "80:8080"
