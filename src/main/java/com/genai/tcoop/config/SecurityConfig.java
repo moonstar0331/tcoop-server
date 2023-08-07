@@ -49,6 +49,7 @@ public class SecurityConfig {
 //                .regexMatchers("^(?!/api/).*").permitAll()
 //                .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/tourapi").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/gpt").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/join", "/api/users/login").permitAll()
                 .antMatchers("/api/**").authenticated()
                 .anyRequest().authenticated()
