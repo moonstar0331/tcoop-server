@@ -28,7 +28,8 @@
                         "<li>종료시간 : " + plan.endTime + "</li>" +
                         "<li>생성일 : " + plan.createdAt + "</li>" +
                         "<li>수정일 : " + plan.updatedAt + "</li>" +
-                        "</ul> </fieldset>");
+                        "</ul> <button type='button'>주변 장소 추천</button> </fieldset>"
+                    );
                 });
             });
         });
@@ -144,7 +145,7 @@
                     xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
                 }
             }).done(function (res){
-                $("#plans").append("<fieldset><legend>" + res["result"]["address"] + "</legend>" +
+                $("#plans").append("<fieldset id='" + res["result"]["id"] + "'><legend>" + res["result"]["address"] + "</legend>" +
                     "<div><img src='" + res["result"]["imageUrl"] + "'/></div>" +
                     "<ul><li>내용 : " + res["result"]["content"] + "</li>" +
                     "<li>위도 : " + res["result"]["latitude"] + "</li>" +
@@ -153,11 +154,21 @@
                     "<li>종료시간 : " + res["result"]["endTime"] + "</li>" +
                     "<li>생성일 : " + res["result"]["createdAt"] + "</li>" +
                     "<li>수정일 : " + res["result"]["updatedAt"] + "</li>" +
-                    "</ul> </fieldset>");
+                    "</ul> <button type='button' onclick='tourApi(" + res["result"]["latitude"] + "," + res["result"]["longitude"] + ")'>주변 장소 추천</button> </fieldset>");
+                    // "</ul> <button type='button' onclick='tourApi(" + "\"" + res["result"]["address"] + "\"" + ")'>주변 장소 추천</button> </fieldset>");
 
                 $('#createForm div input').value = "";
                 $('#createForm').css('display', 'none');
             });
+        }
+
+        function tourApi1(address) {
+            console.log(address);
+        }
+
+        function tourApi(latitude, longitude) {
+            console.log(latitude);
+            console.log(longitude);
         }
     </script>
 </html>
