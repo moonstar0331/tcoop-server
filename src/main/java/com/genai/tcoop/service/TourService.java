@@ -47,9 +47,6 @@ public class TourService {
 
         String responseBody = get(urlBuilder.toString());
 
-        log.info(urlBuilder.toString());
-        log.info(responseBody);
-
         return getJsonObject(responseBody);
     }
 
