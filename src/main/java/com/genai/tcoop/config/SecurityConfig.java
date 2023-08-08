@@ -37,7 +37,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .regexMatchers("^(?!/api/).*")
-                .antMatchers(HttpMethod.GET, "/", "/api/gpt", "/api/tourapi")
+                .antMatchers(HttpMethod.POST, "/", "/api/gpt", "/api/tourapi")
                 .antMatchers(HttpMethod.POST, "/api/users/join", "/api/users/login");
     }
     
