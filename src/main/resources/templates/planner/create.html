@@ -41,7 +41,7 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=utf-8',
                 beforeSend: function(xhr) {
-                    xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
+                    xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
                 }
             }).done(function(response, xhr) {
                 console.log(response["result"]["token"]);
