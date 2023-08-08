@@ -50,6 +50,6 @@ public class GptController {
             }
         }
 
-        return prompt + "중에 관광지와 관련있는 정보를 작성해줘.";
+        return prompt + "중에 관광지와 관련있는 단어에 대한 정보를 작성해줘.";
     }
 }
