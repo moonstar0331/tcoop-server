@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers(HttpMethod.GET, "/api/gpt", "/api/tourapi").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/join", "/api/users/login").permitAll()
-                .antMatchers("/api/**").authenticated()
+                .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
