@@ -50,6 +50,6 @@ public class GptController {
             }
         }
 
-        return prompt + "중 장소와 관련된 단어들이 포함된 여행일정을 추천해줘.";
+        return prompt + " 단어들이 포함된 여행일정을 추천해줘.";
     }
 }
