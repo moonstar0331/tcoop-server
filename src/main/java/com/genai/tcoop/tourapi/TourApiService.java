@@ -5,9 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,9 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.net.URLEncoder.encode;
 
@@ -28,47 +23,11 @@ import static java.net.URLEncoder.encode;
 @RequiredArgsConstructor
 public class TourApiService {
 
-    private static final String BASE_URL = "http://apis.data.go.kr/B551011/EngService1/searchKeyword1";
-    @Value("${tour.api.en.key}")
+    private String BASE_URL = "http://apis.data.go.kr/B551011/EngService1/searchKeyword1";
+    @Value("${tour.api.encode.key}")
     private String TOUR_API_KEY;
 
     private final RestTemplate restTemplate;
-
-    public List<String> test(List<String> keywords) {
-
-        List<String> tourApiInfoList = new ArrayList<>();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        for(String keyword : keywords) {
-            StringBuilder urlBuilder = new StringBuilder(BASE_URL)
-                    .append("?serviceKey=")
-                    .append(encode(TOUR_API_KEY, StandardCharsets.UTF_8))
-                    .append("&numOfRows=5")
-                    .append("&pageNo=1")
-                    .append("&MobileOS=ETC")
-                    .append("&_type=json")
-                    .append("&MobileApp=AppTest")
-                    .append("&listYN=Y")
-                    .append("&keyword=")
-                    .append(keyword);
-
-            Map<String, String> map = new HashMap<>();
-            map.put("serviceKey", encode(TOUR_API_KEY, StandardCharsets.UTF_8));
-            map.put("numOfRows", "5");
-            map.put("pageNo", "1");
-            map.put("MobileOS", "ETC");
-            map.put("_type", "json");
-            map.put("MobileApp", "AppTest");
-            map.put("listYN", "Y");
-            map.put("keyword", keyword);
-
-            String response = restTemplate.getForObject(BASE_URL, String.class, map);
-            tourApiInfoList.add(response);
-        }
-        return tourApiInfoList;
-    }
 
     public TourApiInfoListResponse tour(List<String> keywords) throws UnsupportedEncodingException {
         List<TourApiInfoDTO> tourApiInfoList = new ArrayList<>();
@@ -76,7 +35,7 @@ public class TourApiService {
         for (String keyword : keywords) {
             StringBuilder urlBuilder = new StringBuilder(BASE_URL)
                     .append("?serviceKey=")
-                    .append(encode(TOUR_API_KEY, StandardCharsets.UTF_8))
+                    .append(TOUR_API_KEY)
                     .append("&numOfRows=5")
                     .append("&pageNo=1")
                     .append("&MobileOS=ETC")
@@ -84,7 +43,7 @@ public class TourApiService {
                     .append("&MobileApp=AppTest")
                     .append("&listYN=Y")
                     .append("&keyword=")
-                    .append(keyword);
+                    .append(encode(keyword, StandardCharsets.UTF_8));
 
             String responseBody = get(urlBuilder.toString());
 
