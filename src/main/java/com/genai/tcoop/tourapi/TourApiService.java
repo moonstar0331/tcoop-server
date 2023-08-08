@@ -24,10 +24,9 @@ import static java.net.URLEncoder.encode;
 public class TourApiService {
 
     private String BASE_URL = "http://apis.data.go.kr/B551011/EngService1/searchKeyword1";
+    
     @Value("${tour.api.encode.key}")
     private String TOUR_API_KEY;
-
-    private final RestTemplate restTemplate;
 
     public TourApiInfoListResponse tour(List<String> keywords) throws UnsupportedEncodingException {
         List<TourApiInfoDTO> tourApiInfoList = new ArrayList<>();
