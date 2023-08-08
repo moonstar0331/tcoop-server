@@ -24,6 +24,7 @@ public class GptController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @CrossOrigin
     @PostMapping("/gpt")
     public Response<String> chat(@RequestBody KeywordRequest request) throws URISyntaxException {
         String prompt = generatePrompt(request.getKeywords());
