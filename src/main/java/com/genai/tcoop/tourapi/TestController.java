@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 public class TestController {
 
-    @Value("${tour.api.en.key}")
+    @Value("${tour.api.encode.key}")
     private String TOUR_KEY;
 
     private final RestTemplate restTemplate;

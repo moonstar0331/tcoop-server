@@ -23,7 +23,7 @@ import static java.net.URLEncoder.encode;
 @Service
 public class TourService {
 
-    @Value("${tour.api.key}")
+    @Value("${tour.api.encode.key}")
     private String TOUR_API_KEY;
 
     private static final String BASE_URL = "http://apis.data.go.kr/B551011/KorService1/locationBasedList1";
