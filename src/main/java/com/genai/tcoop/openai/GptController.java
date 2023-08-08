@@ -1,7 +1,6 @@
 package com.genai.tcoop.openai;
 
 import com.genai.tcoop.model.dto.response.Response;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +24,7 @@ public class GptController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @GetMapping("/gpt")
+    @PostMapping("/gpt")
     public Response<String> chat(@RequestBody KeywordRequest request) throws URISyntaxException {
         String prompt = generatePrompt(request.getKeywords());
         ChatRequest chatRequest = new ChatRequest(model, prompt);
