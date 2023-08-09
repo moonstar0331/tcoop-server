@@ -15,6 +15,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static java.net.URLEncoder.encode;
 
@@ -45,11 +46,10 @@ public class TourApiService {
                     .append(encode(keyword, StandardCharsets.UTF_8));
 
             String responseBody = get(urlBuilder.toString());
-
-            log.info(urlBuilder.toString());
-            log.info(responseBody);
-
-            tourApiInfoList.add(getJsonObject(responseBody));
+            TourApiInfoDTO jsonObject = getJsonObject(responseBody);
+            if(jsonObject.getTitle() != null) {
+                tourApiInfoList.add(jsonObject);
+            }
         }
 
         return new TourApiInfoListResponse(tourApiInfoList);
@@ -106,6 +106,11 @@ public class TourApiService {
         JSONObject jsonObject = new JSONObject(response);
         JSONObject resObject = jsonObject.getJSONObject("response");
         JSONObject body = resObject.getJSONObject("body");
+
+        if(body.getInt("totalCount") == 0) {
+            return TourApiInfoDTO.builder().build();
+        }
+
         JSONObject itemsObject = body.getJSONObject("items");
         JSONArray itemsArray = itemsObject.getJSONArray("item");
 
