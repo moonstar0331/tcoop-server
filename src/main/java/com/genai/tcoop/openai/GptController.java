@@ -49,7 +49,7 @@ public class GptController {
             }
         }
 
-//        return prompt + "중 여행 관련된 키워드를 필터링해서 관광 여행 일정을 추천해줘.";
-        return prompt + "중 여행 관련된 키워드를 필터링해서 여행 일정을 계획해줘.";
+//        return prompt + "중 여행 관련된 키워드를 필터링해서 여행 일정을 계획해줘.";
+        return prompt + "중 여행과 관련이 없는 키워드는 필터링하고 장소 관련 키워드를 사용해서 여행 일정을 계획해줘.";
     }
 }
