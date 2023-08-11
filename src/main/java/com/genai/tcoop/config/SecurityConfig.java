@@ -45,6 +45,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.httpBasic().disable()
                 .csrf().disable()
+                .cors()
+                .and()
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers(HttpMethod.GET, "/api/gpt", "/api/tourapi").permitAll()
