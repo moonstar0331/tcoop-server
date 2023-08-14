@@ -94,9 +94,12 @@ public class GptService {
         String[] split = content.split("- ");
         for(int i=1; i<split.length; i++) {
             int idx = split[i].indexOf('(');
-            if (idx == -1) continue;
-            String sub = split[i].substring(0, idx-1);
-            split[i] = sub;
+            if (idx == -1) {
+                split[i] = split[i].trim();
+            } else {
+                String sub = split[i].substring(0, idx-1);
+                split[i] = sub;
+            }
         }
 
         return Arrays.stream(split, 1, split.length).collect(Collectors.toList());
