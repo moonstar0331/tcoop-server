@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -67,8 +68,9 @@ public class GptService {
         }
 
         String content = chatResponse.getChoices().get(0).getMessage().getContent();
-        log.info("content: {}", content);
-        return Arrays.asList(content.split(", "));
+        log.info("\ncontent: \n{}", content);
+
+        return parsingKeyword(content);
     }
 
     private String generatePromptForTourApi(List<String> keywords) {
@@ -82,6 +84,17 @@ public class GptService {
             }
         }
 
-        return prompt + "중에서 여행 테마나 장소와 관련된 고유명사를 키워드로 추출해줘.";
+        return prompt + "중에서 여행 테마나 장소와 관련된 고유명사를 키워드로 추출해서 리스트 형식으로 반환해줘.";
+    }
+
+    private List<String> parsingKeyword(String content) {
+        String[] split = content.split("- ");
+        for(int i=1; i<split.length; i++) {
+            int idx = split[i].indexOf('(');
+            String sub = split[i].substring(0, idx-1);
+            split[i] = sub;
+        }
+
+        return Arrays.stream(split, 1, split.length).collect(Collectors.toList());
     }
 }
