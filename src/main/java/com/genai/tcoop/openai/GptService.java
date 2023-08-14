@@ -97,8 +97,7 @@ public class GptService {
             if (idx == -1) {
                 split[i] = split[i].trim();
             } else {
-                String sub = split[i].substring(0, idx-1);
-                split[i] = sub;
+                split[i] = split[i].substring(0, idx-1).trim();;
             }
         }
 
