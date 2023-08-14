@@ -13,7 +13,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.net.URLEncoder.encode;
 
@@ -28,7 +30,7 @@ public class TourApiService {
     private String TOUR_API_KEY;
 
     public TourApiInfoListResponse tour(List<String> keywords) throws UnsupportedEncodingException {
-        List<TourApiInfoDTO> tourApiInfoList = new ArrayList<>();
+        Set<TourApiInfoDTO> tourApiInfoList = new HashSet<>();
 
         for (String keyword : keywords) {
             StringBuilder urlBuilder = new StringBuilder(BASE_URL)
@@ -50,7 +52,7 @@ public class TourApiService {
             }
         }
 
-        return new TourApiInfoListResponse(tourApiInfoList);
+        return new TourApiInfoListResponse(List.copyOf(tourApiInfoList));
     }
 
     private String get(String apiUrl) {
