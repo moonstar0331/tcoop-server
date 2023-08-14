@@ -70,7 +70,10 @@ public class GptService {
         String content = chatResponse.getChoices().get(0).getMessage().getContent();
         log.info("\ncontent: \n{}", content);
 
-        return parsingKeyword(content);
+        List<String> filteredKeywords = parsingKeyword(content);
+        log.info("filteredKeywords: {}", filteredKeywords.toString());
+
+        return filteredKeywords;
     }
 
     private String generatePromptForTourApi(List<String> keywords) {
