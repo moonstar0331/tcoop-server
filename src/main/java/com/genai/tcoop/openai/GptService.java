@@ -26,6 +26,7 @@ public class GptService {
 
 
     public String callGpt(List<String> keywords) {
+        log.info("callGpt: {}", keywords.toString());
         String prompt = generatePrompt(keywords);
 
         ChatRequest chatRequest = new ChatRequest(model, prompt);
@@ -54,6 +55,7 @@ public class GptService {
     }
 
     public List<String> callGptForTour(List<String> keywords) {
+        log.info("callGptForTour: {}", keywords.toString());
         String prompt = generatePromptForTourApi(keywords);
 
         ChatRequest chatRequest = new ChatRequest(model, prompt);
@@ -65,6 +67,7 @@ public class GptService {
         }
 
         String content = chatResponse.getChoices().get(0).getMessage().getContent();
+        log.info("content: {}", content);
         return Arrays.asList(content.split(", "));
     }
 
