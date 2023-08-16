@@ -70,7 +70,9 @@ public class GptService {
         String content = chatResponse.getChoices().get(0).getMessage().getContent();
         log.info("\ncontent: \n{}", content);
 
-        List<String> filteredKeywords = parsingKeyword(content);
+//        List<String> filteredKeywords = parsingKeyword(content);
+        List<String> filteredKeywords = Arrays.asList(content.split(", "));
+
         log.info("filteredKeywords: {}", filteredKeywords.toString());
 
         return filteredKeywords;
@@ -87,7 +89,7 @@ public class GptService {
             }
         }
 
-        return prompt + "중에서 여행 테마나 장소와 관련된 고유명사를 키워드로 추출해서 리스트 형식으로 반환해줘.";
+        return prompt + "중에서 여행 테마나 장소와 관련된 고유명사로만 필터링 해서 설명 없이 결과만 콤마로 구분해줘.";
     }
 
     private List<String> parsingKeyword(String content) {
