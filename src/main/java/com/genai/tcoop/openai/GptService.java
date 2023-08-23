@@ -24,40 +24,21 @@ public class GptService {
     @Qualifier("openaiRestTemplate")
     @Autowired
     private RestTemplate restTemplate;
+    
+    public KeywordsWithCommentResponse callGpt(List<String> keywords) {
+        
+        // filtering gpt api 호출
+        List<String> filteredKeywords = callGptForFiltering(keywords);
+        
+        // filtered keywords 를 사용해서 comment create gpt api 호출
+        String createdComment = callGptForCreateComment(keywords);
 
-
-    public String callGpt(List<String> keywords) {
-        log.info("callGpt: {}", keywords.toString());
-        String prompt = generatePrompt(keywords);
-
-        ChatRequest chatRequest = new ChatRequest(model, prompt);
-
-        ChatResponse chatResponse = restTemplate.postForObject(url, chatRequest, ChatResponse.class);
-
-        if(chatResponse == null || chatResponse.getChoices() == null || chatResponse.getChoices().isEmpty()) {
-            return "No response";
-        }
-
-        return chatResponse.getChoices().get(0).getMessage().getContent();
+        // filtering 결과 + comment create 결과 리턴
+        return new KeywordsWithCommentResponse(filteredKeywords, createdComment);
     }
 
-    private String generatePrompt(List<String> keywords) {
-        String prompt = "";
-
-        for(int i=0; i<keywords.size(); i++) {
-            if(i == keywords.size()-1) {
-                prompt += keywords.get(i) + " ";
-            } else {
-                prompt += keywords.get(i) + ", ";
-            }
-        }
-
-        return prompt + "중에서 여행 테마나 장소 관련한 고유명사를 키워드로 추출해서 여행 일정을 계획해줘.";
-    }
-
-    public List<String> callGptForTour(List<String> keywords) {
-        log.info("callGptForTour: {}", keywords.toString());
-        String prompt = generatePromptForTourApi(keywords);
+    public List<String> callGptForFiltering(List<String> keywords) {
+        String prompt = generateFilteringPrompt(keywords);
 
         ChatRequest chatRequest = new ChatRequest(model, prompt);
 
@@ -68,17 +49,12 @@ public class GptService {
         }
 
         String content = chatResponse.getChoices().get(0).getMessage().getContent();
-        log.info("\ncontent: \n{}", content);
-
-//        List<String> filteredKeywords = parsingKeyword(content);
         List<String> filteredKeywords = Arrays.asList(content.split(", "));
-
-        log.info("filteredKeywords: {}", filteredKeywords.toString());
-
+        
         return filteredKeywords;
     }
 
-    private String generatePromptForTourApi(List<String> keywords) {
+    private String generateFilteringPrompt(List<String> keywords) {
         String prompt = "";
 
         for(int i=0; i<keywords.size(); i++) {
@@ -92,17 +68,35 @@ public class GptService {
         return prompt + "중에서 여행 테마나 장소와 관련된 고유명사로만 필터링 해서 설명 없이 결과만 콤마로 구분해줘.";
     }
 
-    private List<String> parsingKeyword(String content) {
-        String[] split = content.split("- ");
-        for(int i=1; i<split.length; i++) {
-            int idx = split[i].indexOf('(');
-            if (idx == -1) {
-                split[i] = split[i].trim();
+    public String callGptForCreateComment(List<String> keywords) {
+        if(keywords.size() == 0 || keywords.isEmpty()) {
+            return "Filtered keyword list is empty";
+        }
+
+        String prompt = generatePromptForComment(keywords);
+
+        ChatRequest chatRequest = new ChatRequest(model, prompt);
+
+        ChatResponse chatResponse = restTemplate.postForObject(url, chatRequest, ChatResponse.class);
+
+        if(chatResponse == null || chatResponse.getChoices() == null || chatResponse.getChoices().isEmpty()) {
+            return "No response";
+        }
+
+        return chatResponse.getChoices().get(0).getMessage().getContent();
+    }
+
+    private String generatePromptForComment(List<String> keywords) {
+        String prompt = "";
+
+        for(int i=0; i<keywords.size(); i++) {
+            if(i == keywords.size()-1) {
+                prompt += keywords.get(i) + " ";
             } else {
-                split[i] = split[i].substring(0, idx-1).trim();;
+                prompt += keywords.get(i) + ", ";
             }
         }
 
-        return Arrays.stream(split, 1, split.length).collect(Collectors.toList());
+        return prompt + "를 이용해서 여행 일정을 계획해줘.";
     }
 }

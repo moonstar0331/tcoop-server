@@ -12,7 +12,7 @@ public class GptController {
     private final GptService gptService;
 
     @PostMapping("/gpt")
-    public Response<String> chat(@RequestBody KeywordRequest request) {
+    public Response<KeywordsWithCommentResponse> chat(@RequestBody KeywordRequest request) {
         return Response.success(gptService.callGpt(request.getKeywords()));
     }
 }
