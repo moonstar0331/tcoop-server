@@ -17,10 +17,10 @@ public class TourApiController {
     private final TourApiService tourApiService;
     private final GptService gptService;
 
-    @PostMapping("/api/tourapi")
-    public Response<TourApiInfoListResponse> tourApi(@RequestBody KeywordRequest request) throws UnsupportedEncodingException {
-        List<String> filteredKeywords = gptService.callGptForTour(request.getKeywords());
-        TourApiInfoListResponse tour = tourApiService.tour(filteredKeywords);
-        return Response.success(tour);
-    }
+//    @PostMapping("/api/tourapi")
+//    public Response<TourApiInfoListResponse> tourApi(@RequestBody KeywordRequest request) throws UnsupportedEncodingException {
+//        List<String> filteredKeywords = gptService.callGptForTour(request.getKeywords());
+//        TourApiInfoListResponse tour = tourApiService.tour(filteredKeywords);
+//        return Response.success(tour);
+//    }
 }
