@@ -28,10 +28,12 @@ public class GptService {
     public KeywordsWithCommentResponse callGpt(List<String> keywords) {
         
         // filtering gpt api 호출
+        log.info("before filtering: {}", keywords);
         List<String> filteredKeywords = callGptForFiltering(keywords);
+        log.info("after filtering: {}", filteredKeywords);
         
         // filtered keywords 를 사용해서 comment create gpt api 호출
-        String createdComment = callGptForCreateComment(keywords);
+        String createdComment = callGptForCreateComment(filteredKeywords);
 
         // filtering 결과 + comment create 결과 리턴
         return new KeywordsWithCommentResponse(filteredKeywords, createdComment);

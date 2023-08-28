@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api", method = {RequestMethod.GET, RequestMethod.POST})
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class GptController {
 
