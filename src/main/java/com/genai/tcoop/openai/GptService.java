@@ -9,7 +9,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,6 +38,7 @@ public class GptService {
         return new KeywordsWithCommentResponse(filteredKeywords, createdComment);
     }
 
+    // Google Vision API 로 추출된 키워드 리스트를 추출하기 위한 메소드
     public List<String> callGptForFiltering(List<String> keywords) {
         String prompt = generateFilteringPrompt(keywords);
 
@@ -56,6 +56,7 @@ public class GptService {
         return filteredKeywords;
     }
 
+    // GPT 를 통해서 키워드 필터링을 위한 프롬프트 생성 메소드
     private String generateFilteringPrompt(List<String> keywords) {
         String prompt = "";
 
@@ -70,6 +71,7 @@ public class GptService {
         return prompt + "중에서 여행 테마나 장소와 관련된 고유명사로만 필터링 해서 설명 없이 결과만 콤마로 구분해줘.";
     }
 
+    // 필터링된 키워드를 기반으로 GPT 를 통해서 자동으로 작성할 댓글이 생성되는 메소드
     public String callGptForCreateComment(List<String> keywords) {
         if(keywords.size() == 0 || keywords.isEmpty()) {
             return "Filtered keyword list is empty";
@@ -88,6 +90,7 @@ public class GptService {
         return chatResponse.getChoices().get(0).getMessage().getContent();
     }
 
+    // GPT 를 통한 댓글 자동 생성을 위한 프롬프트 생성 메소드
     private String generatePromptForComment(List<String> keywords) {
         String prompt = "";
 

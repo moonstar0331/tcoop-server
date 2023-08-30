@@ -37,7 +37,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .regexMatchers("^(?!/api/).*")
-                .antMatchers(HttpMethod.POST, "/", "/api/gpt", "/api/tourapi")
+                .antMatchers(HttpMethod.POST, "/", "/api/gpt")
                 .antMatchers(HttpMethod.POST, "/api/users/join", "/api/users/login");
     }
     
@@ -49,8 +49,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .antMatchers(HttpMethod.GET, "/api/gpt", "/api/tourapi").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/join", "/api/users/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/gpt").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
