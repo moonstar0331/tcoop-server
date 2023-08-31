@@ -181,3 +181,5 @@ build
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,intellij+all,visualstudiocode
 src/test/resources/testImage/
+
+src/main/resources/tcoop-397512-32fd7df1e666.json
