@@ -37,7 +37,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .regexMatchers("^(?!/api/).*")
-                .antMatchers(HttpMethod.POST, "/", "/api/gpt")
+                .antMatchers(HttpMethod.POST, "/", "/api/gpt/**")
                 .antMatchers(HttpMethod.POST, "/api/users/join", "/api/users/login");
     }
     
@@ -56,10 +56,10 @@ public class SecurityConfig {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilterBefore(new JwtTokenFilter(key, customUserService), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+//                .and()
+//                .addFilterBefore(new JwtTokenFilter(key, customUserService), UsernamePasswordAuthenticationFilter.class)
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
                 .formLogin()
                 .loginPage("/login").permitAll()
