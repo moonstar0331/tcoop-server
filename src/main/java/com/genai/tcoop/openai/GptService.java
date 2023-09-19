@@ -51,8 +51,15 @@ public class GptService {
         }
 
         String content = chatResponse.getChoices().get(0).getMessage().getContent();
+
+        log.info("GPT filtered Keywords: {}", content);
+
         List<String> filteredKeywords = Arrays.asList(content.split(", "));
-        
+//        String lastKeyword = filteredKeywords.get(filteredKeywords.size() - 1);
+//        if(lastKeyword.indexOf('.') != -1) {
+//            filteredKeywords.set(filteredKeywords.size()-1, lastKeyword.split(" ")[0]);
+//        }
+
         return filteredKeywords;
     }
 

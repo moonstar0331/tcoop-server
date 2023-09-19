@@ -31,6 +31,7 @@ public class GptController {
     @PostMapping("/gpt/comment")
     public Response<CommentResponse> comment(@RequestBody KeywordRequest request) {
         String comment = gptService.callGptForCreateComment(request.getKeywords());
+        log.info("Created comment: {}", comment);
         return Response.success(new CommentResponse(comment));
     }
 }
