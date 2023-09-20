@@ -40,6 +40,11 @@ public class GptService {
 
     // Google Vision API 로 추출된 키워드 리스트를 추출하기 위한 메소드
     public List<String> callGptForFiltering(List<String> keywords) {
+
+        if(keywords.isEmpty()) {
+            return List.of();
+        }
+
         String prompt = generateFilteringPrompt(keywords);
 
         ChatRequest chatRequest = new ChatRequest(model, prompt);
