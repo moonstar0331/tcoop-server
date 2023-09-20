@@ -55,10 +55,14 @@ public class GptService {
         log.info("GPT filtered Keywords: {}", content);
 
         List<String> filteredKeywords = Arrays.asList(content.split(", "));
-//        String lastKeyword = filteredKeywords.get(filteredKeywords.size() - 1);
-//        if(lastKeyword.indexOf('.') != -1) {
-//            filteredKeywords.set(filteredKeywords.size()-1, lastKeyword.split(" ")[0]);
-//        }
+
+        // GPT 응답이 리스트 형식이 아닐 경우에 대한 대비
+        String lastKeyword = filteredKeywords.get(filteredKeywords.size() - 1);
+        int index = lastKeyword.indexOf("중에서");
+        if(index != -1) {
+            String modified = lastKeyword.substring(0, index-1);
+            filteredKeywords.set(filteredKeywords.size()-1, modified);
+        }
 
         return filteredKeywords;
     }
