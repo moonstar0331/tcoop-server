@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class KeywordsResponse {
+public class PromptContentResponse {
 
-    private List<String> keywords;
+    private String content;
 }
