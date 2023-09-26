@@ -1,5 +1,6 @@
-package com.genai.tcoop.openai;
+package com.genai.tcoop.openai.request;
 
+import com.genai.tcoop.openai.Message;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

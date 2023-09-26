@@ -1,4 +1,4 @@
-package com.genai.tcoop.openai;
+package com.genai.tcoop.openai.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentResponse {
+public class KeywordsWithCommentResponse {
 
+    private List<String> keywords;
     private String comment;
 }
