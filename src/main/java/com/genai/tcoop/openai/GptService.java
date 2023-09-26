@@ -130,8 +130,9 @@ public class GptService {
         }
 
         String gptPrompt = keywords + prompt;
+        log.info("callGptWithPrompt keyword: {}", keywords);
 
-        ChatRequest chatRequest = new ChatRequest(model, prompt);
+        ChatRequest chatRequest = new ChatRequest(model, gptPrompt);
 
         ChatResponse chatResponse = restTemplate.postForObject(url, chatRequest, ChatResponse.class);
 
