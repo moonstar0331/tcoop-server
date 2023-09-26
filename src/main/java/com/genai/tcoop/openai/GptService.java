@@ -1,5 +1,7 @@
 package com.genai.tcoop.openai;
 
+import com.genai.tcoop.openai.request.ChatRequest;
+import com.genai.tcoop.openai.response.KeywordsWithCommentResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -119,5 +121,24 @@ public class GptService {
         }
 
         return prompt + "를 이용해서 여행 일정을 계획해줘.";
+    }
+
+    public String callGptWithPrompt(List<String> keywords, String prompt) {
+
+        if(keywords.size() == 0 || keywords.isEmpty()) {
+            return "Input keyword List is Empty";
+        }
+
+        String gptPrompt = keywords + prompt;
+
+        ChatRequest chatRequest = new ChatRequest(model, prompt);
+
+        ChatResponse chatResponse = restTemplate.postForObject(url, chatRequest, ChatResponse.class);
+
+        if (chatResponse == null || chatResponse.getChoices() == null || chatResponse.getChoices().isEmpty()) {
+            return "No response";
+        }
+
+        return chatResponse.getChoices().get(0).getMessage().getContent();
     }
 }
